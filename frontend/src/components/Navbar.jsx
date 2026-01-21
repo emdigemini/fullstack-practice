@@ -1,20 +1,13 @@
 import { Link } from "react-router";
-import { useEffect, useState, useContext } from "react";
-import { ProductContext } from "../context/ProductContext";
+import { useEffect, useContext } from "react";
+import ProductContext from "../context/ProductContext";
 
 const Navbar = () => {
   const { fetchOrders, orders } = useContext(ProductContext);
 
   useEffect(() => {
-    const countOrders = async () => {
-      try {
-        const res = await fetchOrders();
-      } catch (err) {
-        console.log("Error fetching order", err);
-      }
-    }
-    countOrders();
-  }, []);
+    fetchOrders();
+  }, [fetchOrders]);
 
   return (
     <header>

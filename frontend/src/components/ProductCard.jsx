@@ -1,10 +1,11 @@
 import axiosInstance from "../lib/axios";
 import { money, ratingAverage } from "../lib/utils";
-import { ProductContext } from "../context/ProductContext";
+import ProductContext from "../context/ProductContext";
 import { useContext } from "react";
+import { useEffect } from "react";
 
 const ProductCard = ({ product }) => {
-  const { orders, setOrders } = useContext(ProductContext);
+  const { orders, setOrders, fetchOrders } = useContext(ProductContext);
 
   const addToOrder = async () => {
     try {
@@ -31,6 +32,10 @@ const ProductCard = ({ product }) => {
   const existingProduct = (productId) => {
     return orders.find(order => order.productId === productId)
   }
+
+  useEffect(() => {
+    fetchOrders();
+  }, [fetchOrders]);
 
   return (
     <div className="product__card">

@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import { ProductContext } from "../context/ProductContext";
+import ProductContext from "../context/ProductContext";
 import { money } from "../lib/utils";
 import axiosInstance from "../lib/axios";
 import { useEffect } from "react";
@@ -18,7 +18,7 @@ const Basket = () => {
 
   useEffect(() => {
     fetchOrders();
-  }, [])
+  }, [fetchOrders])
 
   return (
     <div className="order__basket">

@@ -1,6 +1,6 @@
 import { useState, useEffect, useContext } from "react";
 import ProductCard from "../components/ProductCard";
-import { ProductContext } from "../context/ProductContext";
+import ProductContext from "../context/ProductContext";
 
 const Crumbs = () => {
   const { fetchProducts, products, isRateLimited } = useContext(ProductContext);
@@ -18,7 +18,7 @@ const Crumbs = () => {
     
     renderProducts();
     return () => isMounted = false;
-  }, []);
+  }, [fetchProducts]);
 
   return (
     <div className="crumbs">
