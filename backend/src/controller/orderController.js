@@ -12,8 +12,8 @@ export async function getAllOrders(_, res) {
 
 export async function createOrder(req, res) {
   try {
-    const { product, flavor, qty = 1, price } = req.body;
-    const newOrder = await Order.create({ product, flavor, qty, price });
+    const { productName, flavor, qty = 1, price } = req.body;
+    const newOrder = await Order.create({ productName, flavor, qty, price });
     res.status(201).json(newOrder);
   } catch (err) {
     console.warn("Error in createOrder controller", err);
@@ -23,8 +23,8 @@ export async function createOrder(req, res) {
 
 export async function editOrder(req, res) {
   try {
-    const { product, flavor, qty = 1, price } = req.body;
-    const updateOrder = await Order.findByIdAndUpdate(req.params.id, { product, flavor, qty, price }, { new: true });
+    const { productName, flavor, qty = 1, price } = req.body;
+    const updateOrder = await Order.findByIdAndUpdate(req.params.id, { productName, flavor, qty, price }, { new: true });
     if(!updateOrder) return res.status(404).json({message: "Order not found."});
 
     res.status(200).json({message: "Order successfully updated."})

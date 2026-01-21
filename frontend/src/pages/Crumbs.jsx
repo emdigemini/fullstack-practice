@@ -1,36 +1,41 @@
-import axiosInstance from "../lib/axios";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import ProductCard from "../components/ProductCard";
+import { ProductContext } from "../context/ProductContext";
 
 const Crumbs = () => {
-  const [ products, setProducts ] = useState([]);
+  const { fetchProducts, products } = useContext(ProductContext);
   const [ isLoading, setIsLoading ] = useState(true);
   const [ isRateLimited, setIsRateLimited ] = useState(false);
 
   useEffect(() => {
-    const fetchProducts = async () => {
+    let isMounted = true;
+    const renderProducts = async () => {
       try {
-        const res = await axiosInstance.get("/products");
-        setProducts(res.data);
+        await fetchProducts();
       } catch (err) {
         console.log("Error fetching products", err);
         if(err.response?.status === 429) setIsRateLimited(true);
       } finally {
-        setIsLoading(false);
+        if (isMounted) setIsLoading(false);
       }
     } 
 
-    fetchProducts();
+    renderProducts();
+    return () => isMounted = false;
   }, []);
 
   return (
     <div className="crumbs">
       <div className="products">
-        {products.map(product => {
-          return (
-            <ProductCard key={product._id} product={product} />
-          )
-        })}
+        {isLoading && <p className="loading-products">Loading products...</p>}
+        {isRateLimited && <p className="loading-products--error">Too many requests. Please try again later.</p>}
+        {!isLoading && !isRateLimited &&
+          products.map(product => {
+            return (
+              <ProductCard key={product._id} product={product} />
+            )
+          })
+        }
       </div>
     </div>
   )

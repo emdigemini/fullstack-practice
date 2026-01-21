@@ -27,7 +27,7 @@ export async function addNewProduct(req, res){
     const { productName, description, flavor, 
       price, ratings, reviews } = req.body;
     const newProduct = await Product.create({ productName, description, flavor, 
-      price, ratings, reviews, image: req.file.path });
+      price, ratings, reviews, image: req.file?.path || "" });
     res.status(201).json(newProduct);
   } catch (err) {
     console.log("Error in addNewProduct controller", err);
@@ -39,11 +39,19 @@ export async function editProduct(req, res){
   try {
     const { productName, description, flavor, 
       price, ratings, reviews } = req.body; 
-      const updateProduct = await Product.findByIdAndUpdate(req.params.id, { productName, description, flavor, 
-      price, ratings, reviews, image: req.file.path }, { new: true });
-      if(!updateProduct) return res.status(404).json({message: "Product not found."});
+    const updateData = {
+      productName, description, flavor,
+      price, ratings, reviews
+    };
 
-      res.status(200).json({message: "Product successfully updated."});
+    if(req.file?.path){
+      updateData.image = req.file.path;
+    }
+
+    const updateProduct = await Product.findByIdAndUpdate(req.params.id, updateData, { new: true });
+    if(!updateProduct) return res.status(404).json({message: "Product not found."});
+
+    res.status(200).json({message: "Product successfully updated."});
   } catch (err) {
     console.log("Error in editProduct controller", err);
     res.status(500).json({message: "Internal server error."});

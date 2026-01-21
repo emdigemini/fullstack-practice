@@ -13,6 +13,10 @@ const orderSchema = new mongoose.Schema({
   },
   price: {
     type: Number
+  },
+  image : {
+    type: String,
+    default: "no_image_uploaded"
   }
 }, {timestamps: true});
 

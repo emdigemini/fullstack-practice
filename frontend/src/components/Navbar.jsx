@@ -1,6 +1,21 @@
-import { Link } from "react-router"
+import { Link } from "react-router";
+import { useEffect, useState, useContext } from "react";
+import { ProductContext } from "../context/ProductContext";
 
 const Navbar = () => {
+  const { fetchOrders, orders } = useContext(ProductContext);
+
+  useEffect(() => {
+    const countOrders = async () => {
+      try {
+        const res = await fetchOrders();
+      } catch (err) {
+        console.log("Error fetching order", err);
+      }
+    }
+    countOrders();
+  }, []);
+
   return (
     <header>
       <div>
@@ -14,7 +29,7 @@ const Navbar = () => {
         <Link to={"/contact"}>CONTACT</Link>
         <Link to={"/basket"} className="basket">
           <i className="bi bi-basket"></i>
-          <span>5</span>
+          <span>{orders.length}</span>
         </Link>
       </nav>
     </header>
