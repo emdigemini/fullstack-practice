@@ -12,8 +12,16 @@ export async function getAllOrders(_, res) {
 
 export async function createOrder(req, res) {
   try {
-    const { productName, flavor, qty = 1, price } = req.body;
-    const newOrder = await Order.create({ productName, flavor, qty, price });
+    const { productId, productName, flavor, qty = 1, price } = req.body;
+    
+    const existingOrder = await Order.findOne({ productId });
+    if(existingOrder){
+      const updateOrder = await Order.findByIdAndUpdate(existingOrder._id, { $inc: { qty: 1 } }, { new: true });
+      res.status(201).json(updateOrder);
+      return
+    } 
+
+    const newOrder = await Order.create({ productId, productName, flavor, qty, price });
     res.status(201).json(newOrder);
   } catch (err) {
     console.warn("Error in createOrder controller", err);

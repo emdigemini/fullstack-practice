@@ -4,20 +4,32 @@ import { ProductContext } from "../context/ProductContext";
 import { useContext } from "react";
 
 const ProductCard = ({ product }) => {
-  const { setOrders } = useContext(ProductContext);
+  const { orders, setOrders } = useContext(ProductContext);
 
   const addToOrder = async () => {
     try {
       const newOrder = {
+        productId: product._id,
         productName: product.productName,
         flavor: product.flavor[0],
         price: product.price,
       }
-      setOrders(prev => [...prev, newOrder]);
+
+      if(existingProduct(product._id)) {
+        setOrders(prev => prev.map(order => order.productId === newOrder.productId ? { ...order, qty: order.qty + 1 } : order));
+        await axiosInstance.post("/orders", { productId: newOrder.productId });
+        return;
+      }
+      
+      setOrders(prev => [ ...prev, { ...newOrder, qty: 1 } ]);
       await axiosInstance.post("/orders", newOrder);
     } catch (err) {
       console.log("Error failed to order product", err);
     } 
+  }
+
+  const existingProduct = (productId) => {
+    return orders.find(order => order.productId === productId)
   }
 
   return (

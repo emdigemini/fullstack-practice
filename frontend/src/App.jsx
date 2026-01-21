@@ -1,8 +1,9 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router";
+import { ProductContextProvider } from "./context/ProductContext";
 import Navbar from "./components/Navbar";
 import HomePage from "./pages/HomePage";
 import Crumbs from "./pages/Crumbs";
-import { ProductContextProvider } from "./context/ProductContext";
+import Basket from "./pages/Basket";
 
 const App = () => {
   return (
@@ -12,6 +13,7 @@ const App = () => {
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/crumbs" element={<Crumbs />} />
+          <Route path="/basket" element={<Basket />} />
         </Routes>
       </ProductContextProvider>
     </Router>
