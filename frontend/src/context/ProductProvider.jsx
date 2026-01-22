@@ -18,11 +18,12 @@ function ProductContextProvider({ children }) {
   }, []);
 
   const fetchOrders = useCallback(async () => {
-    const res = await axiosInstance.get("/orders")
-    setOrders(prev => {
-      const sortedOrders = res.data.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
-      return sortedOrders;
-    });
+    try {
+      const res = await axiosInstance.get("/orders")
+      setOrders(res.data);
+    } catch (err) {
+      console.log("Failed loading data", err);
+    }
   }, []);
 
   return(

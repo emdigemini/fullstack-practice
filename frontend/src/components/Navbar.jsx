@@ -22,7 +22,7 @@ const Navbar = () => {
         <Link to={"/contact"}>CONTACT</Link>
         <Link to={"/basket"} className="basket">
           <i className="bi bi-basket"></i>
-          <span>{orders.length}</span>
+          <span>{!orders ? 0 : orders.length}</span>
         </Link>
       </nav>
     </header>

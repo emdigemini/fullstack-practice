@@ -5,13 +5,23 @@ import ProductContext from "../context/ProductContext";
 const Crumbs = () => {
   const { fetchProducts, products, isRateLimited } = useContext(ProductContext);
   const [ isLoading, setIsLoading ] = useState(true);
+  const delay = ms => new Promise(res => setTimeout(res, ms));
 
   useEffect(() => {
     let isMounted = true;
+    let retries = 0;
+    const MAX_RETRIES = 3;
     const renderProducts = async () => {
       try {
         await fetchProducts();
-      } finally {
+      } catch (err) {
+        if(retries < MAX_RETRIES) {
+          retries++;
+          await delay(1000 * retries);
+          renderProducts();
+        }
+        renderProducts();
+      }finally {
         if (isMounted) setIsLoading(false);
       }
     } 
