@@ -20,12 +20,16 @@
 
     .loading-products--error {
       color: #dc2626;
+      display: flex;
+      flex-direction: column;
       background-color: #fef2f2;
       border: 1px solid #fecaca;
       border-radius: 8px;
       padding: 1rem 1.25rem;
       max-width: 480px;
       margin: 2rem auto;
+      text-align: center;
+      gap: 6px;
     }
 
     .product__card {

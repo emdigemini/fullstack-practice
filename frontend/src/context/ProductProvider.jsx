@@ -27,7 +27,8 @@ function ProductContextProvider({ children }) {
   }, []);
 
   return(
-    <ProductContext.Provider value={{ fetchProducts, products, fetchOrders, orders, setOrders, isRateLimited }}>
+    <ProductContext.Provider value={{ fetchProducts, products, fetchOrders,
+    orders, setOrders, isRateLimited }}>
       {children}
     </ProductContext.Provider>
   )
@@ -35,3 +36,4 @@ function ProductContextProvider({ children }) {
 }
 
 export default ProductContextProvider;
+

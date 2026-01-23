@@ -32,7 +32,7 @@ const Basket = () => {
 
     try {
       setOrders(prev => {
-        prev.map(order =>
+        return prev.map(order =>
           order._id === orderId ? { ...order, qty: tempQty} : order
         );
       })
@@ -63,19 +63,35 @@ const Basket = () => {
                   <p className="order-card__subtitle">{order.flavor}</p>
                 </div>
 
+                <div className="order-card__price">
+                  <p>Price:
+                  <span>{money(order.price)}</span>
+                  </p>
+                </div>
+
                 <div className="order-card__qty">
-                  Qty: {
-                    editingId === order._id 
-                    ? <input type="number" value={tempQty} placeholder={order.qty}
-                        onChange={(e) => editOrderQty(e)}
-                      />
-                    : order.qty
-                  }
+                  {editingId === order._id ? (
+                    <input
+                      type="number"
+                      value={tempQty}
+                      onChange={editOrderQty}
+                    />
+                  ) : (
+                    order.qty
+                  )}
+                </div>
+
+                <div className="order-card__total">
+                  <p>Total Price:
+                  <span>{money(order.price * order.qty)}</span>
+                  </p>
                 </div>
 
                 <div className="order-card__actions">
-                  <span className="order-card__price">{money(order.price)}</span>
-                  <button className="order-card__edit" onClick={() => editOrder(order)}>
+                  <button
+                    className="order-card__edit"
+                    onClick={() => editOrder(order)}
+                  >
                     {editingId === order._id ? "Done" : "Edit"}
                   </button>
                   <button
@@ -86,6 +102,7 @@ const Basket = () => {
                   </button>
                 </div>
               </div>
+
             )
           })
         }

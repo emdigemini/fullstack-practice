@@ -18,10 +18,12 @@
       border-radius: 14px;
       padding: 1rem 1.5rem;
       box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+
       display: grid;
-      grid-template-columns: 1fr auto auto;
+      grid-template-columns: 2fr 1fr 1fr 1fr auto;
       align-items: center;
       gap: 1.5rem;
+
       transition: transform 0.15s ease, box-shadow 0.15s ease;
 
       &:hover {
@@ -46,14 +48,46 @@
         color: #6b7280;
       }
 
+      &__price,
+      &__total {
+        font-weight: 600;
+        color: #111827;
+        text-align: right;
+
+        p {
+          display: flex;
+          flex-direction: column;
+          align-items: flex-start;
+          font-size: 12px;
+          color: rgba(#111827, 0.5);
+          gap: 4px;
+
+          span {
+            color: #111827;
+            font-size: 1rem;
+          }
+        }
+      }
+
+      &__total {
+        p {
+          span {
+            color: rgba($accent, 0.8);
+          }
+        }
+      }
+
       &__qty {
         font-weight: 500;
         color: #111827;
-        min-width: 70px;
         text-align: center;
 
         input {
-          max-width: 50px;
+          width: 56px;
+          padding: 0.25rem;
+          text-align: center;
+          border-radius: 6px;
+          border: 1px solid #d1d5db;
         }
       }
 
@@ -61,12 +95,6 @@
         display: flex;
         align-items: center;
         gap: 0.75rem;
-      }
-
-      &__price {
-        font-weight: 600;
-        color: #111827;
-        margin-right: 0.5rem;
       }
 
       &__edit {
@@ -77,7 +105,6 @@
         font-size: 0.75rem;
         border-radius: 8px;
         cursor: pointer;
-        transition: background 0.15s ease;
 
         &:hover {
           background-color: #e5e7eb;
@@ -90,7 +117,6 @@
         color: #ef4444;
         font-size: 0.75rem;
         cursor: pointer;
-        transition: color 0.15s ease;
 
         &:hover {
           color: #b91c1c;
