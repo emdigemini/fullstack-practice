@@ -69,7 +69,12 @@
         font-weight: 600;
         color: #222;
         line-height: 1.4;
-        padding: 16px;
+        padding: 0 16px;
+      }
+
+      .product__desc {
+        color: $gray;
+        padding: 0 16px 16px;
       }
 
       .product__ratings {

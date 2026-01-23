@@ -12,7 +12,7 @@ export async function getAllOrders(_, res) {
 
 export async function createOrder(req, res) {
   try {
-    const { productId, productName, flavor, qty = 1, price } = req.body;
+    const { image, productId, productName, flavor, qty = 1, price } = req.body;
     
     const existingOrder = await Order.findOne({ productId });
     if(existingOrder){
@@ -21,7 +21,7 @@ export async function createOrder(req, res) {
       return
     } 
 
-    const newOrder = await Order.create({ productId, productName, flavor, qty, price });
+    const newOrder = await Order.create({ image, productId, productName, flavor, qty, price });
     res.status(201).json(newOrder);
   } catch (err) {
     console.warn("Error in createOrder controller", err);

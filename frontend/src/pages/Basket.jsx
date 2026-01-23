@@ -3,50 +3,36 @@ import ProductContext from "../context/ProductContext";
 import { money } from "../lib/utils";
 import axiosInstance from "../lib/axios";
 import { useEffect } from "react";
+import { editOrder, deleteOrder } from "../hooks/orderServices";
 
 const Basket = () => {
   const { orders, setOrders, fetchOrders } = useContext(ProductContext);
   const [ editingId, setEditingId ] = useState(null);
   const [ tempQty, setTempQty ] = useState(1);
 
-  const deleteOrder = async (orderId) => {
-    try {
-      setOrders(prev => prev.filter(order => order._id !== orderId));
-      await axiosInstance.delete(`/orders/${orderId}`);
-    } catch (err) {
-      console.log("Order not found.", err);
-    }
-  }
-
   useEffect(() => {
     fetchOrders();
   }, [fetchOrders]);
 
-  const editOrder = async (order) => {
-    const orderId = order._id;
+  const handleDelete = (orderId) => {
+    deleteOrder(setOrders, orderId);
+  };
+
+  const handleEdit = (orders) => {
+    const orderId = orders._id;
     if(editingId !== orderId){
       setEditingId(orderId);
-      setTempQty(order.qty);
+      setTempQty(orders.qty);
       return;
     }
 
-    try {
-      setOrders(prev => {
-        return prev.map(order =>
-          order._id === orderId ? { ...order, qty: tempQty} : order
-        );
-      })
-      await axiosInstance.put(`/orders/${orderId}`, 
-        {qty: tempQty});
-      setEditingId(null);
-    } catch (err) {
-      console.log("Failed editing order", err);
-    }
-  };
+    const order = { id: orderId, qty: tempQty };  
+    editOrder(setOrders, order)
+    setEditingId(null);
+  }
 
   const editOrderQty = e => {
     const count = Number(e.target.value);
-
     setTempQty(count < 1 ? 1 : count);
   }
 
@@ -58,6 +44,9 @@ const Basket = () => {
           orders.map(order => {
             return (
               <div key={order._id} className="order-card">
+                <div className="order-card__img">
+                  <img src={`http://localhost:5005/${order.image}`} alt="" />
+                </div>
                 <div className="order-card__info">
                   <p className="order-card__title">{order.productName}</p>
                   <p className="order-card__subtitle">{order.flavor}</p>
@@ -90,12 +79,12 @@ const Basket = () => {
                 <div className="order-card__actions">
                   <button
                     className="order-card__edit"
-                    onClick={() => editOrder(order)}
+                    onClick={() => handleEdit(order)}
                   >
                     {editingId === order._id ? "Done" : "Edit"}
                   </button>
                   <button
-                    onClick={() => deleteOrder(order._id)}
+                    onClick={() => handleDelete(order._id)}
                     className="order-card__remove"
                   >
                     Remove

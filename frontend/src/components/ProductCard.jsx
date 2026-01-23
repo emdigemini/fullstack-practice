@@ -3,6 +3,7 @@ import { money, ratingAverage } from "../lib/utils";
 import ProductContext from "../context/ProductContext";
 import { useContext } from "react";
 import { useEffect } from "react";
+import { existingProduct } from "../hooks/orderServices";
 
 const ProductCard = ({ product }) => {
   const { orders, setOrders, fetchOrders } = useContext(ProductContext);
@@ -10,13 +11,14 @@ const ProductCard = ({ product }) => {
   const addToOrder = async () => {
     try {
       const newOrder = {
+        image: product.image,
         productId: product._id,
         productName: product.productName,
         flavor: product.flavor[0],
         price: product.price,
-      }
+      };
 
-      if(existingProduct(product._id)) {
+      if(existingProduct(orders, product._id)) {
         setOrders(prev => prev.map(order => order.productId === newOrder.productId ? { ...order, qty: order.qty + 1 } : order));
         await axiosInstance.post("/orders", { productId: newOrder.productId });
         return;
@@ -27,10 +29,6 @@ const ProductCard = ({ product }) => {
     } catch (err) {
       console.log("Error failed to order product", err);
     } 
-  }
-
-  const existingProduct = (productId) => {
-    return orders.find(order => order.productId === productId)
   }
 
   useEffect(() => {
@@ -44,6 +42,9 @@ const ProductCard = ({ product }) => {
       </div>
       <div className="product__name">
         {product.productName}
+      </div>
+      <div className="product__desc">
+        {product.description}
       </div>
       <div className="product__ratings">
         <img src={`/star-rating/${ratingAverage(product.reviews)}-star.png`} alt="ratings" /> ({product.reviews.length})

@@ -20,7 +20,7 @@
       box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
 
       display: grid;
-      grid-template-columns: 2fr 1fr 1fr 1fr auto;
+      grid-template-columns: 1fr 1fr 1fr 1fr 1fr auto;
       align-items: center;
       gap: 1.5rem;
 
@@ -29,6 +29,17 @@
       &:hover {
         transform: translateY(-2px);
         box-shadow: 0 10px 24px rgba(0, 0, 0, 0.12);
+      }
+
+      &__img {
+        width: 120px;
+        height: 110px;
+        img {
+          border-radius: 8px;
+          object-fit: cover;
+          height: 100%;
+          width: 100%;
+        }
       }
 
       &__info {
